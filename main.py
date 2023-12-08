@@ -92,6 +92,8 @@ X_test_tfidf_svd = svd.transform(X_test_tfidf)
 encoder = preprocessing.LabelEncoder()
 y_data_n = encoder.fit_transform(y_data)
 y_test_n = encoder.fit_transform(y_test)
+y_data = encoder.fit_transform(y_data)
+y_test = encoder.fit_transform(y_test)
 
 encoder.classes_
 
@@ -142,4 +144,4 @@ def create_dnn_model():
 #chạy naive bayes
 train_model(MultinomialNB(), X_data_tfidf, y_data, X_test_tfidf, y_test, is_neuralnet=False)
 #chạy cnn
-create_dnn_model()
+# create_dnn_model()
