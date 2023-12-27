@@ -97,7 +97,7 @@ y_test = encoder.fit_transform(y_test)
 
 encoder.classes_
 
-def train_model(classifier, X_data, y_data, X_test, y_test, is_neuralnet=False, n_epochs=5):       
+def train_model(classifier, X_data, y_data, X_test, y_test, is_neuralnet=False, n_epochs=3):       
     X_train, X_val, y_train, y_val = train_test_split(X_data, y_data, test_size=0.1, random_state=42)
     
     if is_neuralnet:
@@ -107,6 +107,7 @@ def train_model(classifier, X_data, y_data, X_test, y_test, is_neuralnet=False, 
         test_predictions = classifier.predict(X_test)
         val_predictions = val_predictions.argmax(axis=-1)
         test_predictions = test_predictions.argmax(axis=-1)
+        print(test_predictions)
         filename = 'cnn.pkl'
         with open(filename, 'wb') as file:
             pickle.dump(classifier, file)
@@ -115,7 +116,11 @@ def train_model(classifier, X_data, y_data, X_test, y_test, is_neuralnet=False, 
         train_predictions = classifier.predict(X_train)
         val_predictions = classifier.predict(X_val)
         test_predictions = classifier.predict(X_test)
-        print('Kết quả với mô hình naive bayes input: ' + text_test+ ' là: Nhãn '+test_predictions[len(test_predictions)-1])
+
+
+        
+        # print('Kết quả với mô hình naive bayes input: ' + text_test+ ' là: Nhãn '+str(test_predictions[len(test_predictions)-1]))
+        # print(test_predictions)
         # r = accuracy_score(y_train, train_predictions)
         filename = 'naive_bayes_model.pkl'
         with open(filename, 'wb') as file:
