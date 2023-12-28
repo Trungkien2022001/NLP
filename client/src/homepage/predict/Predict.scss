@@ -1,0 +1,52 @@
+.header {
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+  }
+  .title {
+    margin: 10px;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  .result-container {
+    .result {
+      width: 100%;
+      height: 200px;
+      overflow: auto;
+      .item {
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 28px;
+        .text {
+        }
+        .pos {
+          color: blue;
+        }
+        .neg {
+          color: red;
+        }
+        .neu {
+          color: green;
+        }
+      }
+    }
+  }
+  .file-label {
+    margin: "20px 0";
+    display: inline-block;
+    padding: 10px;
+    background-color: #4caf50; /* Màu nền của button */
+    color: white; /* Màu chữ trắng */
+    cursor: pointer;
+  }
+  
+  .file-input {
+    display: none;
+  }
+  .result-header{
+      text-align: center;
+      font-size: 24px;
+  }
+  
