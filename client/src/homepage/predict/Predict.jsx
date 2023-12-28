@@ -3,6 +3,7 @@ import axios from 'axios'
 import './Predict.scss'
 import { Button, TextField } from '@mui/material'
 import CSVReader from 'react-csv-reader';
+import { toast } from 'react-toastify';
 import Papa from 'papaparse';
 import { Loading } from '../loading/Loading';
 const labelKey = {
@@ -36,8 +37,14 @@ export const Predict = () => {
     }
     const handleCsvData = async result => {
         console.log(result.data.map(i => i.content))
-        setIp(result.data.map(i => i.content))
-        setLength(result.data.length)
+        const data = result.data.map(i => i.content).filter(i=> !!i)
+        setIp(data)
+        setLength(data.length)
+        if(!data.length){
+            toast.error("Có vẻ như bạn không nhập đúng định dạng file CSV. Tên cột trong sheet là content chứa danh sách các câu văn nhé",  {
+                position: toast.POSITION.TOP_CENTER
+              })
+        }
 
         // await handleSubmit()
     }
@@ -75,13 +82,14 @@ export const Predict = () => {
                     <div style={{ margin: "10px 0px" }}>
 
                         <label htmlFor="fileInput" className="file-label">
-                            <span>Nhập nhiều câu văn từ tệp</span>
+                            <span>Nhập từ tệp csv </span>
                             <input
                                 style={{ padding: '10px', display: 'none' }}
                                 type="file"
                                 id="fileInput"
                                 className="file-input"
                                 onChange={handleFileSelect}
+                                placeholder='VUi lòng nhập file có định dạng csv với tên cốt là content'
                             />
                         </label>
                         {
