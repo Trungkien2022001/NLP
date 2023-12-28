@@ -6,8 +6,8 @@ import CSVReader from 'react-csv-reader';
 import Papa from 'papaparse';
 import { toast } from 'react-toastify';
 import { Loading } from '../loading/Loading';
-
 export const Word2vec = () => {
+    const host = process.env.REACT_APP_HOST || `http://localhost:5000`
 
     const [ip, setIp] = useState("")
     const [result, setResult] = useState("")
@@ -16,10 +16,11 @@ export const Word2vec = () => {
     const handleSubmit = async () => {
         await get()
     }
+    console.log(process.env)
     async function get() {
 
         console.log("ping")
-        const test = await axios.post(`http://localhost:5000/model`, {
+        const test = await axios.post(`${host}/model`, {
             input: ip
         })
         console.log(test.data)
