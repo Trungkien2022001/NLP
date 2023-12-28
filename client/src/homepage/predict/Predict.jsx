@@ -11,8 +11,8 @@ const labelKey = {
     "Tiêu cực": "neg",
     "Trung tính": "neu",
 }
-
 export const Predict = () => {
+    const host = process.env.REACT_APP_HOST || `http://localhost:5000`
 
     const [ip, setIp] = useState([])
     const [result, setResult] = useState("")
@@ -24,7 +24,7 @@ export const Predict = () => {
         console.log("Getting data!!", ip.length)
         setLoading(true)
         if (ip.length) {
-            const test = await axios.post(`http://localhost:5000`, {
+            const test = await axios.post(host, {
                 input: ip
             })
             console.log(test.data)
