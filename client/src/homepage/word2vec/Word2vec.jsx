@@ -4,6 +4,7 @@ import './Word2vec.scss'
 import { Button, TextField } from '@mui/material'
 import CSVReader from 'react-csv-reader';
 import Papa from 'papaparse';
+import { toast } from 'react-toastify';
 import { Loading } from '../loading/Loading';
 
 export const Word2vec = () => {
@@ -22,6 +23,9 @@ export const Word2vec = () => {
             input: ip
         })
         console.log(test.data)
+        if(!test.data.result){
+            toast.error("Từ bạn tìm kiếm không có trong từ điển, vui lòng tìm với từ khác nhé")
+        }
         setResult(test.data.result)
         return test.data.result
 
