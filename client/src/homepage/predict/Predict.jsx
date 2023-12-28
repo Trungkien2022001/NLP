@@ -15,7 +15,8 @@ export const Predict = () => {
 
     const [ip, setIp] = useState([])
     const [result, setResult] = useState("")
-    const [jsonData, setJsonData] = useState(null);
+    const [length, setLength] = useState(0);
+    const [l, setL] = useState(0)
     const [loading, setLoading] = useState(false)
     const handleSubmit = async () => {
         setResult([])
@@ -27,27 +28,17 @@ export const Predict = () => {
             })
             console.log(test.data)
             setResult(test.data.result)
+            setL(test.data.result.length)
             setIp([])
+            setLength(0)
         }
         setLoading(false)
     }
-    async function get() {
-        setLoading(true)
-        if (!ip.length) {
-            const test = await axios.post(`http://localhost:5000`, {
-                input: ip
-            })
-            console.log(test.data)
-            setResult(test.data.result)
-            setIp([])
-        }
-        setLoading(false)
-
-
-    }
-    const handleCsvData = result => {
+    const handleCsvData = async result => {
         console.log(result.data.map(i => i.content))
         setIp(result.data.map(i => i.content))
+        setLength(result.data.length)
+
         // await handleSubmit()
     }
     const handleFileSelect = event => {
@@ -77,11 +68,11 @@ export const Predict = () => {
                         //   maxRows={3}
                         label="Câu văn"
                         variant="outlined"
-                        placeholder='Nhập câu văn cần phân loại'
+                        placeholder='Nhập câu văn cần phân loại, ví dụ: Sản phẩm này rất tốt'
                         onChange={e => setIp([e.target.value])}
                     />
                     {/* <input style={{padding: "10px"}} type="file" id="fileInput" className="file-input" onChange={handleFileSelect} /> */}
-                    <div style={{ margin: "20px 0px" }}>
+                    <div style={{ margin: "10px 0px" }}>
 
                         <label htmlFor="fileInput" className="file-label">
                             <span>Nhập nhiều câu văn từ tệp</span>
@@ -93,6 +84,9 @@ export const Predict = () => {
                                 onChange={handleFileSelect}
                             />
                         </label>
+                        {
+                            length ? <span>{`Có ${length} câu văn được tải lên`}</span> : <></>
+                        }
                     </div>
                 </div>
                 <div className="submit">
@@ -101,6 +95,10 @@ export const Predict = () => {
                 <div className="result-header">
                     Kết quả
                 </div>
+                {
+                    l ? <div>{`Đã phân tích thành công ${l} câu văn!`}</div> : <></>
+                }
+                <hr />
                 <div className="result-container">
                     <div className="result">
                         {result && result.length ?
@@ -119,6 +117,7 @@ export const Predict = () => {
                     </div>
                 </div>
             </div>
+            <hr />
         </div>
 
     )
