@@ -16,19 +16,20 @@ export const Word2vec = () => {
         await get()
     }
     async function get() {
+
+        console.log("ping")
         const test = await axios.post(`http://localhost:5000/model`, {
             input: ip
         })
-        console.log("ping")
         console.log(test.data)
-        setResult(test.data.result[0])
+        setResult(test.data.result)
         return test.data.result
 
 
     }
     return (
         <div>
-            <div className="title" style={{ marginTop: "50px" }}>
+            <div className="title" style={{ marginTop: "20px" }}>
                 2. Model Word2Vec
             </div>
             <div>
@@ -43,18 +44,18 @@ export const Word2vec = () => {
                         //   maxRows={3}
                         label="Từ"
                         variant="outlined"
-                        placeholder='Nhập từ ngữ cần tìm kiếm'
+                        placeholder='Nhập từ ngữ cần tìm kiếm, ví dụ: Tốt, xấu'
                         onChange={e => setIp(e.target.value)}
                     />
                     {/* <input style={{padding: "10px"}} type="file" id="fileInput" className="file-input" onChange={handleFileSelect} /> */}
-                    <div style={{ margin: "20px 0px" }}>
+                    <div style={{ margin: "10px 0px" }}>
                     </div>
                 </div>
                 <div className="submit">
                     <Button onClick={() => handleSubmit()} variant="contained">Submit</Button>
                 </div>
                 <div className="result-header">
-                    Kết quả
+                    Kết quả về độ tương đồng
                 </div>
                 <div className="result-container">
                     <div className="result">
@@ -65,7 +66,7 @@ export const Word2vec = () => {
                                         {item[0]}
                                     </div>
                                     <div className="label">
-                                        {item[1] * 100}
+                                        {(item[1] * 100).toFixed(2)}%
                                     </div>
                                 </div>
                             )
