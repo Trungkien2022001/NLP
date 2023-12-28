@@ -4,3 +4,28 @@ b2. Tiền xử lý dữ liệu: Loại bỏ stopword, tách từ tiếng việt
     chạy file handle.py
 b3. trainning: chayj file main.py (với 2 model mà naive bayes và cnn)
     có thể text trựa tiếp khi thay text trong file main.py (text_test) để test model
+
+
+## Run server
+### Flask
+1. Install Dependency
+```bash
+pip install flask pickle sklearn tensorflow gensim flask_cors
+```
+2. Run flask server
+```bash
+python server.py
+```
+### React
+1. 
+```bash
+cd client
+```
+2. Install dependency 
+```bash
+npm i
+```
+3. Run react app
+```bash
+npm start
+```
