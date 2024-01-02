@@ -26,10 +26,10 @@ def get_data(folder_path):
                 y.append(path)
 
     return X, y
-# train_path = os.path.join('E:\\Code\\Project\\NLP\\train_data') #train
+# train_path = os.path.join('./train_data') #train
 
 # chỗ này thay bằng folder của project trên máy nhé (cộng thêm \\test_data nữa)
-train_path = os.path.join('E:\\Code\\Project\\NLP\\test_data') #train
+train_path = os.path.join('./test_data') #train
 X_data, y_data = get_data(train_path)
 pickle.dump(X_data, open('X_data_test.pkl', 'wb'))
 pickle.dump(y_data, open('y_data_test.pkl', 'wb'))
