@@ -33,10 +33,9 @@ export const Word2vec = () => {
   }
   return (
     <div>
+      {loading && <Loading></Loading>}
       <div className="title-model">2. Model Word2Vec</div>
       <div>
-        {loading && <Loading></Loading>}
-
         <div className="chat-input">
           <TextField
             style={{ width: "100%" }}
