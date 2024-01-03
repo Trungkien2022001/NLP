@@ -11,6 +11,9 @@ from sklearn.naive_bayes import BernoulliNB
 from sklearn import preprocessing
 import numpy as np
 import sklearn
+from sklearn.svm import SVC
+from keras.models import Sequential
+from keras.layers import Embedding, LSTM, Dense
 
 text_test ='mới dùng được 2 lần là đã hỏng'
 text_label = 'positive'
@@ -53,6 +56,7 @@ def train_model(classifier, X_data, y_data, X_test, y_test, is_neuralnet=False, 
         filename = 'cnn.pkl'
         with open(filename, 'wb') as file:
             pickle.dump(classifier, file)
+        print("-- CNN --")
     else:
         classifier.fit(X_train, y_train)
         train_predictions = classifier.predict(X_train)
@@ -63,6 +67,7 @@ def train_model(classifier, X_data, y_data, X_test, y_test, is_neuralnet=False, 
         filename = 'MultinomialNB.pkl'
         with open(filename, 'wb') as file:
             pickle.dump(classifier, file)
+        print("-- NB --")
 
 # get the accuracy score of the test data. 
 
@@ -77,7 +82,7 @@ def create_dnn_model():
     layer = Dense(1024, activation='relu')(input_layer)
     layer = Dense(1024, activation='relu')(layer)
     layer = Dense(512, activation='relu')(layer)
-    output_layer = Dense(10, activation='softmax')(layer)
+    output_layer = Dense(3, activation='softmax')(layer)
     
     classifier = keras.Model(input_layer, output_layer)
     classifier.compile(optimizer=keras.optimizers.Adam(), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
@@ -85,3 +90,55 @@ def create_dnn_model():
 
 train_model(BernoulliNB(), X_data_w2v, y_data, X_test_w2v, y_test, is_neuralnet=False)
 create_dnn_model()
+
+# Sử dụng mô hình phân loại SVM với vectơ Word2Vec
+def create_svm_model():
+    # Tạo và huấn luyện mô hình SVM
+    svm_classifier = SVC(kernel='linear')  # Bạn có thể thay đổi kernel tùy thuộc vào yêu cầu
+    svm_classifier.fit(X_train, y_train)  # Sử dụng tập huấn luyện đã được chia
+
+    # Đánh giá mô hình trên tập validation và test
+    val_predictions = svm_classifier.predict(X_val)
+    test_predictions = svm_classifier.predict(X_test_w2v)
+
+    print("-- SVM --")
+    print("Validation accuracy: ", sklearn.metrics.accuracy_score(val_predictions, y_val))
+    print("Test accuracy: ", sklearn.metrics.accuracy_score(test_predictions, y_test_n))
+
+    # Lưu mô hình
+    filename = 'svm_model.pkl'
+    with open(filename, 'wb') as file:
+        pickle.dump(svm_classifier, file)
+
+# Chia tập dữ liệu thành tập huấn luyện và tập validation
+X_train, X_val, y_train, y_val = train_test_split(X_data_w2v, y_data_n, test_size=0.1, random_state=42)
+
+# Gọi hàm tạo và huấn luyện mô hình SVM
+create_svm_model()
+
+# Tạo và huấn luyện mô hình LSTM
+vocab_size = len(word2vec_model.wv)
+embedding_dim = 100 
+input_shape = X_train.shape[1]
+
+lstm_model = Sequential()
+lstm_model.add(Embedding(input_dim=vocab_size, output_dim=embedding_dim, input_length=X_train.shape[1]))
+lstm_model.add(LSTM(100))  
+lstm_model.add(Dense(3, activation='softmax'))
+lstm_model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+lstm_model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=5, batch_size=256)
+
+# Đánh giá mô hình trên tập validation và test
+val_predictions = lstm_model.predict(X_val)
+test_predictions = lstm_model.predict(X_test_w2v)
+
+val_predictions = val_predictions.argmax(axis=-1)
+test_predictions = test_predictions.argmax(axis=-1)
+
+print("-- LSTM --")
+print("Validation accuracy: ", sklearn.metrics.accuracy_score(val_predictions, y_val))
+print("Test accuracy: ", sklearn.metrics.accuracy_score(test_predictions, y_test_n))
+
+# Lưu mô hình
+lstm_model.save('lstm_model.h5')

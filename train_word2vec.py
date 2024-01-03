@@ -6,6 +6,8 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 
+stop_words = ['ma', 'anh', 'em', 'vì', 'thế', 'nhưng']
+
 # Bước 1: Chuẩn bị dữ liệu
 positive_text1 = open('./data_raw/test_nhan_0.txt', 'r', encoding='utf-8').read()
 negative_text1 = open('./data_raw/test_nhan_1.txt', 'r', encoding='utf-8').read()
@@ -25,6 +27,9 @@ def preprocess_text(text):
 
     words = [word for word in text.split(' ') if word]
 
+    # Loại bỏ từ dừng
+    words = [word for word in words if word.casefold() not in stop_words]
+
     return words
 
 # Bước 2: Đào tạo mô hình Word2Vec
@@ -38,7 +43,7 @@ tokenized_neutral1 = [preprocess_text(sentence) for sentence in neutral_text1.sp
 
 all_sentences = tokenized_positive + tokenized_negative + tokenized_neutral +  tokenized_positive1 + tokenized_negative1 + tokenized_neutral1
 
-word2vec_model = Word2Vec(sentences=all_sentences, vector_size=100, window=5, min_count=1, workers=4)
+word2vec_model = Word2Vec(sentences=all_sentences, vector_size=100, window=5, min_count=3, workers=4)
 print(word2vec_model)
 word2vec_model.save("word2model.save")
 t=word2vec_model.wv.most_similar('tệ')
@@ -58,7 +63,6 @@ for i, word in enumerate(all_words):
     plt.annotate(word, xy=(result[i, 0], result[i, 1]))
 
 plt.show()
-print(t)
 print(t)
 
 # # Bước 3: Chuẩn bị dữ liệu cho mô hình phân loại
