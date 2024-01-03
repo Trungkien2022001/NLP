@@ -34,19 +34,6 @@ for (i in neu) {
 console.log("neu.length: " + neu.length);
 
 // pos
-<<<<<<< HEAD
-const pos = fs.readFileSync('C:\\Users\\84329\\Documents\\NLP\\data_raw\\test_nhan_1.txt', 'utf-8').split('\r\n')
-console.log(pos.length)
-for(i in pos){
-    fs.writeFileSync(`./test_data/positive/pos_${i}`, pos[i])
-}
-
-// neg
-const neg = fs.readFileSync('C:\\Users\\84329\\Documents\\NLP\\data_raw\\test_nhan_0.txt', 'utf-8').split('\r\n')
-console.log(neg.length)
-for(i in neg){
-    fs.writeFileSync(`./test_data/negative/neg_${i}`, neg[i])
-=======
 const pos = fs
   .readFileSync("./data_raw/test_nhan_1.txt", "utf-8")
   .split("\r\n");
@@ -62,6 +49,5 @@ const neg = fs
 console.log("neg.length: " + neg.length);
 for (i in neg) {
   fs.writeFileSync(`./test_data/negative/neg_${i}`, neg[i]);
->>>>>>> 74ca769f8f8fb08770b90c2910592bc50b2a7700
 }
 console.log("success");
