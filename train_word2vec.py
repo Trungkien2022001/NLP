@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 
 # Bước 1: Chuẩn bị dữ liệu
-positive_text1 = open('E:\\Code\\Project\\NLP\\data_raw\\test_nhan_0.txt', 'r', encoding='utf-8').read()
-negative_text1 = open('E:\\Code\\Project\\NLP\\data_raw\\test_nhan_1.txt', 'r', encoding='utf-8').read()
-neutral_text1 = open('E:\\Code\\Project\\NLP\\data_raw\\test_nhan_2.txt', 'r', encoding='utf-8').read()
-positive_text = open('E:\\Code\\Project\\NLP\\data_raw\\train_nhan_0.txt', 'r', encoding='utf-8').read()
-negative_text = open('E:\\Code\\Project\\NLP\\data_raw\\train_nhan_1.txt', 'r', encoding='utf-8').read()
-neutral_text = open('E:\\Code\\Project\\NLP\\data_raw\\train_nhan_2.txt', 'r', encoding='utf-8').read()
+positive_text1 = open('C:\\Users\\84329\\Documents\\NLP\\data_raw\\test_nhan_0.txt', 'r', encoding='utf-8').read()
+negative_text1 = open('C:\\Users\\84329\\Documents\\NLP\\data_raw\\test_nhan_1.txt', 'r', encoding='utf-8').read()
+neutral_text1 = open('C:\\Users\\84329\\Documents\\NLP\\data_raw\\test_nhan_2.txt', 'r', encoding='utf-8').read()
+positive_text = open('C:\\Users\\84329\\Documents\\NLP\\data_raw\\train_nhan_0.txt', 'r', encoding='utf-8').read()
+negative_text = open('C:\\Users\\84329\\Documents\\NLP\\data_raw\\train_nhan_1.txt', 'r', encoding='utf-8').read()
+neutral_text = open('C:\\Users\\84329\\Documents\\NLP\\data_raw\\train_nhan_2.txt', 'r', encoding='utf-8').read()
 
 def preprocess_text(text):
     # Chuyển đổi về chữ thường

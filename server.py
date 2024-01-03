@@ -29,7 +29,7 @@ y_data_ = pickle.load(open('y_data.pkl', 'rb'))
 X_test = pickle.load(open('X_data_test.pkl', 'rb'))
 y_test_ = pickle.load(open('y_data_test.pkl', 'rb'))
 y_test_.append(text_label)
-word2vec_model = Word2Vec.load('E:\\Code\\Project\\NLP\\word2model.save')
+word2vec_model = Word2Vec.load('C:\\Users\\84329\\Documents\\NLP\\word2model.save')
 def train_model(classifier, X_data, y_data, X_test, y_test, input_data , is_neuralnet=False, n_epochs=3):       
     X_train, X_val, y_train, y_val = train_test_split(X_data, y_data, test_size=0.1, random_state=42)
     classifier.fit(X_train, y_train)
