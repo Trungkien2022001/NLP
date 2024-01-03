@@ -23,8 +23,8 @@ y_test = pickle.load(open('y_data_test.pkl', 'rb'))
 y_test.append(text_label)
 
 # Đọc mô hình Word2Vec từ file đã được đào tạo hoặc tải về từ nguồn nào đó
-# word2vec_model = Word2Vec.load('C:\\Users\\84329\\Documents\\NLP\\MiAI_Word2Vec_Demo\\data\\word_model.save')
-word2vec_model = Word2Vec.load('C:\\Users\\84329\\Documents\\NLP\\word2model.save')
+# word2vec_model = Word2Vec.load('./MiAI_Word2Vec_Demo\\data\\word_model.save')
+word2vec_model = Word2Vec.load('./word2model.save')
 
 # Chuyển đổi văn bản thành vectơ Word2Vec
 def text_to_w2v_vector(text, model):

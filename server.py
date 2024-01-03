@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request
 import pickle
 import os 
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-from keras.layers import Dense, Dropout, Lambda, Embedding, Conv1D, LSTM, Input
+# from keras.layers import Dense, Dropout, Lambda, Embedding, Conv1D, LSTM, Input
 from tensorflow import keras
 from sklearn.metrics import accuracy_score
 from gensim.models import Word2Vec
@@ -19,22 +19,24 @@ from flask_cors import CORS
 
 
 # text_test ='mới dùng được 2 lần là đã hỏng'
-text_label = 'positive'
 labelText = ["Tiêu cực", "Trung tính",  "Tích cực"]
 
-
+current_script_path = os.path.abspath(__file__)
+current_directory = os.path.dirname(current_script_path)
+resources_folder_path = os.path.join(current_directory)
 
 X_data = pickle.load(open('X_data.pkl', 'rb'))
 y_data_ = pickle.load(open('y_data.pkl', 'rb'))
 X_test = pickle.load(open('X_data_test.pkl', 'rb'))
 y_test_ = pickle.load(open('y_data_test.pkl', 'rb'))
-y_test_.append(text_label)
-word2vec_model = Word2Vec.load('C:\\Users\\84329\\Documents\\NLP\\word2model.save')
+
+word2vec_model = Word2Vec.load( os.path.join(resources_folder_path,'word2model.save'))
+
 def train_model(classifier, X_data, y_data, X_test, y_test, input_data , is_neuralnet=False, n_epochs=3):       
     X_train, X_val, y_train, y_val = train_test_split(X_data, y_data, test_size=0.1, random_state=42)
     classifier.fit(X_train, y_train)
-    train_predictions = classifier.predict(X_train)
-    val_predictions = classifier.predict(X_val)
+    # train_predictions = classifier.predict(X_train)
+    # val_predictions = classifier.predict(X_val)
     test_predictions = classifier.predict(X_test)
     # return 'Kết quả với mô hình là: Nhãn '+str(test_predictions[len(test_predictions)-1])
    
@@ -59,10 +61,8 @@ def get_data():
 
 
     try:
-        # Trích xuất dữ liệu từ body của yêu cầu
         data = request.get_json()
 
-        # Kiểm tra xem 'input' có trong dữ liệu không
         if 'input' in data:
             input_data = data['input']
             for i in input_data:
@@ -90,21 +90,17 @@ def get_data():
             a = train_model(MultinomialNB(), X_data_tfidf, y_data, X_test_tfidf, y_test, input_data, is_neuralnet=False)
             return jsonify({'result': a})
         else:
-            # Trả về lỗi nếu 'input' không được tìm thấy trong dữ liệu
             return jsonify({'error': 'Input not found in request data'}), 400
 
     except Exception as e:
-        # Trả về lỗi nếu có lỗi xảy ra trong quá trình xử lý
         return jsonify({'error': str(e)}), 500
 @app.route('/model', methods=['POST'])
 def get_data1():
 
 
     try:
-        # Trích xuất dữ liệu từ body của yêu cầu
         data = request.get_json()
 
-        # Kiểm tra xem 'input' có trong dữ liệu không
         if 'input' in data:
             input_data = data['input']
             print(input_data)
@@ -112,12 +108,10 @@ def get_data1():
             return jsonify({'result': t})
            
         else:
-            # Trả về lỗi nếu 'input' không được tìm thấy trong dữ liệu
             return jsonify({'error': 'Input not found in request data'}), 400
 
     except Exception as e:
-        # Trả về lỗi nếu có lỗi xảy ra trong quá trình xử lý
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': str(e)}), 200
 
 if __name__ == '__main__':
     app.run(port=5000, debug=False)
