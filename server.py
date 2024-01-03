@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-
+import numpy as np
 import pickle
 import os 
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
@@ -31,6 +31,31 @@ X_test = pickle.load(open('X_data_test.pkl', 'rb'))
 y_test_ = pickle.load(open('y_data_test.pkl', 'rb'))
 
 word2vec_model = Word2Vec.load( os.path.join(resources_folder_path,'word2model.save'))
+
+
+def text_to_w2v_vector(text, model):
+            words = text.split()
+            vectorized_words = [model.wv[word] for word in words if word in model.wv]
+            if vectorized_words:
+                return np.mean(vectorized_words, axis=0)
+            else:
+                return np.zeros(model.vector_size)  # Vectơ không nếu
+X_data_ = np.array([text_to_w2v_vector(text, word2vec_model) for text in X_data])
+encoder = preprocessing.LabelEncoder()
+y_data = encoder.fit_transform(y_data_)
+
+
+
+
+count_vect = CountVectorizer(analyzer='word', token_pattern=r'\w{1,}')
+count_vect.fit(X_data)
+
+
+vect = TfidfVectorizer(analyzer='word', max_features=30000)
+vect.fit(X_data) # learn vocabulary and idf from training set
+X_data_ =  vect.transform(X_data)
+svd = TruncatedSVD(n_components=300, random_state=42)
+svd.fit(X_data_)
 
 def train_model(classifier, X_data, y_data, X_test, y_test, input_data , is_neuralnet=False, n_epochs=3):       
     X_train, X_val, y_train, y_val = train_test_split(X_data, y_data, test_size=0.1, random_state=42)
@@ -67,27 +92,22 @@ def get_data():
             input_data = data['input']
             for i in input_data:
                 X_test.append(i)
-            count_vect = CountVectorizer(analyzer='word', token_pattern=r'\w{1,}')
-            count_vect.fit(X_data)
+            X_test_t =  vect.transform(X_test)
 
+            def text_to_w2v_vector(text, model):
+                words = text.split()
+                vectorized_words = [model.wv[word] for word in words if word in model.wv]
+                if vectorized_words:
+                    return np.mean(vectorized_words, axis=0)
+                else:
+                    return np.zeros(model.vector_size)  # Vectơ không nếu không có từ nào trong từ điển
+            # X_data_ = np.array([text_to_w2v_vector(text, word2vec_model) for text in X_data])
+            # X_test_ = np.array([text_to_w2v_vector(text, word2vec_model) for text in X_test])
 
-            tfidf_vect = TfidfVectorizer(analyzer='word', max_features=30000)
-            tfidf_vect.fit(X_data) # learn vocabulary and idf from training set
-            X_data_tfidf =  tfidf_vect.transform(X_data)
-            X_test_tfidf =  tfidf_vect.transform(X_test)
-
-
-            svd = TruncatedSVD(n_components=300, random_state=42)
-            svd.fit(X_data_tfidf)
-
-
-
-            encoder = preprocessing.LabelEncoder()
-            y_data = encoder.fit_transform(y_data_)
             y_test = encoder.fit_transform(y_test_)
 
             encoder.classes_
-            a = train_model(MultinomialNB(), X_data_tfidf, y_data, X_test_tfidf, y_test, input_data, is_neuralnet=False)
+            a = train_model(MultinomialNB(), X_data_, y_data, X_test_t, y_test, input_data, is_neuralnet=False)
             return jsonify({'result': a})
         else:
             return jsonify({'error': 'Input not found in request data'}), 400

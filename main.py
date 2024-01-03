@@ -24,9 +24,9 @@ text_label = 'positive'
 
 X_data = pickle.load(open('X_data.pkl', 'rb'))
 y_data = pickle.load(open('y_data.pkl', 'rb'))
-X_test = pickle.load(open('X_data_test.pkl', 'rb'))
+X_test = pickle.load(open('X_data_train.pkl', 'rb'))
 X_test.append(text_test)
-y_test = pickle.load(open('y_data_test.pkl', 'rb'))
+y_test = pickle.load(open('y_data_train.pkl', 'rb'))
 y_test.append(text_label)
 
 
@@ -136,7 +136,7 @@ def train_model(classifier, X_data, y_data, X_test, y_test, is_neuralnet=False, 
 
 
 # mạng nơ ron nhân tạo
-def create_dnn_model():
+def create_cnn_model():
     input_layer = Input(shape=(300,))
     layer = Dense(1024, activation='relu')(input_layer)
     layer = Dense(1024, activation='relu')(layer)
@@ -147,6 +147,6 @@ def create_dnn_model():
     classifier.compile(optimizer=keras.optimizers.Adam(), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     train_model(classifier=classifier, X_data=X_data_tfidf_svd, y_data=y_data_n, X_test=X_test_tfidf_svd, y_test=y_test_n, is_neuralnet=True)
 #chạy naive bayes
-train_model(MultinomialNB(), X_data_tfidf, y_data, X_test_tfidf, y_test, is_neuralnet=False)
+# train_model(MultinomialNB(), X_data_tfidf, y_data, X_test_tfidf, y_test, is_neuralnet=False)
 #chạy cnn
-# create_dnn_model()
+create_cnn_model()

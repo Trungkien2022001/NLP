@@ -17,13 +17,10 @@ text_label = 'positive'
 
 X_data = pickle.load(open('X_data.pkl', 'rb'))
 y_data = pickle.load(open('y_data.pkl', 'rb'))
-X_test = pickle.load(open('X_data_test.pkl', 'rb'))
+X_test = pickle.load(open('X_data_train.pkl', 'rb'))
 X_test.append(text_test)
-y_test = pickle.load(open('y_data_test.pkl', 'rb'))
+y_test = pickle.load(open('y_data_train.pkl', 'rb'))
 y_test.append(text_label)
-
-# Đọc mô hình Word2Vec từ file đã được đào tạo hoặc tải về từ nguồn nào đó
-# word2vec_model = Word2Vec.load('./MiAI_Word2Vec_Demo\\data\\word_model.save')
 word2vec_model = Word2Vec.load('./word2model.save')
 
 # Chuyển đổi văn bản thành vectơ Word2Vec
@@ -83,5 +80,5 @@ def create_dnn_model():
     classifier.compile(optimizer=keras.optimizers.Adam(), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     train_model(classifier=classifier, X_data=X_data_w2v, y_data = y_data_n, X_test=X_test_w2v, y_test=y_test_n, is_neuralnet=True)
 
-train_model(BernoulliNB(), X_data_w2v, y_data, X_test_w2v, y_test, is_neuralnet=False)
+# train_model(BernoulliNB(), X_data_w2v, y_data, X_test_w2v, y_test, is_neuralnet=False)
 create_dnn_model()

@@ -6,7 +6,20 @@ import os
 import pickle
 dir_path = os.path.dirname(os.path.realpath(os.getcwd()))
 dir_path = os.path.join(dir_path)
-stop_words = ['ma', 'anh', 'em', 'vì', 'thế', 'nhưng']
+stop_words = [
+    "và", "hay", "là", "của", "được", "rằng", "cho", "trong", "đến", "có",
+    "đã", "cùng", "với", "như", "này", "một", "nhiều", "để", "từ", "khi",
+    "đó", "làm", "ở", "được", "qua", "nếu", "nhưng", "về", "ở", "rất", "cũng",
+    "được", "vậy", "bạn", "đều", "không", "đều", "vào", "ra", "nếu", "ai",
+    "làm", "chỉ", "muốn", "cũng", "ở", "từ", "trên", "nếu", "là", "có", "không",
+    "cho", "này", "cảm", "ơn", "chúng", "ta", "điều", "này", "điều", "nọ",
+    "tại", "đây", "còn", "người", "ta", "có", "mình", "mình", "này", "một số",
+    "những", "có", "rằng", "nhất", "họ", "nó", "có", "đó", "vào", "lúc",
+    "sau", "ra", "làm", "việc", "càng", "mà", "được", "chứ", "ngay", "nhà",
+    "đầu", "làm", "cái", "mới", "sự", "ngày", "thường", "lên", "đi", "nước",
+    "nhiều", "làm", "việc", "mỗi", "làm", "cả", "nói", "người", "những",
+    "có", "hơn", "của", "trước", "những", "cái", "người", "thế", "giới"
+]
 def get_data(folder_path):
     X = []
     y = []
@@ -29,8 +42,8 @@ def get_data(folder_path):
 # train_path = os.path.join('./train_data') #train
 
 # chỗ này thay bằng folder của project trên máy nhé (cộng thêm \\test_data nữa)
-train_path = os.path.join('./test_data') #train
+train_path = os.path.join('./train_data') #train
 X_data, y_data = get_data(train_path)
-pickle.dump(X_data, open('X_data_test.pkl', 'wb'))
-pickle.dump(y_data, open('y_data_test.pkl', 'wb'))
+pickle.dump(X_data, open('X_data_train.pkl', 'wb'))
+pickle.dump(y_data, open('y_data_train.pkl', 'wb'))
 print(X_data, y_data)
