@@ -74,9 +74,10 @@ def create_dnn_model():
     layer = Dense(1024, activation='relu')(input_layer)
     layer = Dense(1024, activation='relu')(layer)
     layer = Dense(512, activation='relu')(layer)
-    output_layer = Dense(10, activation='softmax')(layer)
+    output_layer = Dense(3, activation='softmax')(layer)
     
     classifier = keras.Model(input_layer, output_layer)
+    # classifier.compile(optimizer=keras.optimizers.Adam(), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     classifier.compile(optimizer=keras.optimizers.Adam(), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     train_model(classifier=classifier, X_data=X_data_w2v, y_data = y_data_n, X_test=X_test_w2v, y_test=y_test_n, is_neuralnet=True)
 

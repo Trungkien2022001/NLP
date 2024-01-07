@@ -1,5 +1,6 @@
 import pickle
 import os 
+import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from keras.layers import Dense, Dropout, Lambda, Embedding, Conv1D, LSTM, Input
 from tensorflow import keras
@@ -10,6 +11,7 @@ from sklearn import preprocessing
 from sklearn.naive_bayes import GaussianNB
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.naive_bayes import BernoulliNB
+
 import sklearn
 from sklearn.model_selection import train_test_split
 
@@ -31,19 +33,29 @@ y_test.append(text_label)
 
 
 # create a count vectorizer object 
-count_vect = CountVectorizer(analyzer='word', token_pattern=r'\w{1,}')
-count_vect.fit(X_data)
+# count_vect = CountVectorizer(analyzer='word', token_pattern=r'\w{1,}')
+# count_vect.fit(X_data)
 
-# transform the training and validation data using count vectorizer object
-X_data_count = count_vect.transform(X_data)
-X_test_count = count_vect.transform(X_test)
+# # transform the training and validation data using count vectorizer object
+# X_data_count = count_vect.transform(X_data)
+# X_test_count = count_vect.transform(X_test)
 
 # word level - we choose max number of words equal to 30000 except all words (100k+ words)
+# X_data = [
+#     "sản_phẩm rất đẹp",
+#     "sản_phẩm không_đẹp, xấu, không_bền",
+#     "vừa xấu vừa không_bền"
+# ]
 tfidf_vect = TfidfVectorizer(analyzer='word', max_features=30000)
 tfidf_vect.fit(X_data) # learn vocabulary and idf from training set
 X_data_tfidf =  tfidf_vect.transform(X_data)
 # assume that we don't have test set before
 X_test_tfidf =  tfidf_vect.transform(X_test)
+tfidf_array = X_data_tfidf.toarray()
+
+# Hoặc có thể chuyển ma trận TF-IDF thành DataFrame của Pandas để xem nó dễ đọc hơn
+tfidf_df = pd.DataFrame(tfidf_array, columns=tfidf_vect.get_feature_names_out())
+print(tfidf_df)
 
 # # ngram level - we choose max number of words equal to 30000 except all words (100k+ words)
 # tfidf_vect_ngram = TfidfVectorizer(analyzer='word', max_features=30000, ngram_range=(2, 3))
@@ -65,7 +77,11 @@ svd.fit(X_data_tfidf)
 
 X_data_tfidf_svd = svd.transform(X_data_tfidf)
 X_test_tfidf_svd = svd.transform(X_test_tfidf)
+# Convert the resulting array into a DataFrame
+svd_df = pd.DataFrame(X_data_tfidf_svd, columns=[f'svd_{i+1}' for i in range(X_data_tfidf_svd.shape[1])])
 
+# Print or display the DataFrame
+print(svd_df)
 # from gensim.models import KeyedVectors 
 # dir_path = os.path.dirname(os.path.realpath(os.getcwd()))
 # word2vec_model_path = os.path.join(dir_path, "Data/vi/vi.vec")
@@ -147,6 +163,6 @@ def create_cnn_model():
     classifier.compile(optimizer=keras.optimizers.Adam(), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     train_model(classifier=classifier, X_data=X_data_tfidf_svd, y_data=y_data_n, X_test=X_test_tfidf_svd, y_test=y_test_n, is_neuralnet=True)
 #chạy naive bayes
-# train_model(MultinomialNB(), X_data_tfidf, y_data, X_test_tfidf, y_test, is_neuralnet=False)
+# train_model(SVM(), X_data_tfidf, y_data, X_test_tfidf, y_test, is_neuralnet=False)
 #chạy cnn
 create_cnn_model()

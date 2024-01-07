@@ -25,8 +25,8 @@ current_script_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(current_script_path)
 resources_folder_path = os.path.join(current_directory)
 
-X_data = pickle.load(open('X_data.pkl', 'rb'))
-y_data_ = pickle.load(open('y_data.pkl', 'rb'))
+X_data = pickle.load(open('X_data_train.pkl', 'rb'))
+y_data_ = pickle.load(open('y_data_train.pkl', 'rb'))
 X_test = pickle.load(open('X_data_test.pkl', 'rb'))
 y_test_ = pickle.load(open('y_data_test.pkl', 'rb'))
 
