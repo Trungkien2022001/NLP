@@ -20,19 +20,41 @@ stop_words = [
     "nhiều", "làm", "việc", "mỗi", "làm", "cả", "nói", "người", "những",
     "có", "hơn", "của", "trước", "những", "cái", "người", "thế", "giới"
 ]
+
+reverse_words = ["không",  "chẳng", "chưa"]
+# s_words=["xấu", "đẹp", "tệ", "tuyệt_vời"]
 def get_data(folder_path):
     X = []
     y = []
     dirs = os.listdir(folder_path)
     for path in tqdm(dirs):
-        file_paths = os.listdir(os.path.join(folder_path, path))
+        file_paths = os.listdir(os.path.join(folder_path, path))     
         for file_path in tqdm(file_paths):
             with open(os.path.join(folder_path, path, file_path), 'r', encoding="utf-8") as f:
                 lines = f.readlines()
                 lines = ' '.join(lines)
+                lines = [word for word in lines if word.casefold() not in stop_words]
                 lines = gensim.utils.simple_preprocess(lines)
-                lines =  [word for word in lines if word.casefold() not in stop_words]
-                lines = ' '.join(lines)
+
+                new_lines = []
+                i = 0
+                while i < len(lines):
+                    current_word = lines[i]
+
+                    if current_word in reverse_words:
+                        # Nếu là từ phủ định, kết hợp với từ tiếp theo để tạo từ ghép mới
+                        if i + 1 < len(lines):
+                            combined_word = current_word + '_' + lines[i + 1]
+                            new_lines.append(combined_word)
+                            i += 2  # Bước 2 để bỏ qua từ tiếp theo đã được kết hợp
+                        else:
+                            new_lines.append(current_word)
+                            i += 1
+                    else:
+                        new_lines.append(current_word)
+                        i += 1
+
+                lines = ' '.join(new_lines)
                 lines = ViTokenizer.tokenize(lines)
 
                 X.append(lines)

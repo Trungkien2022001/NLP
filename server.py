@@ -59,10 +59,38 @@ svd.fit(X_data_)
 
 def train_model(classifier, X_data, y_data, X_test, y_test, input_data , is_neuralnet=False, n_epochs=3):       
     X_train, X_val, y_train, y_val = train_test_split(X_data, y_data, test_size=0.1, random_state=42)
-    classifier.fit(X_train, y_train)
-    # train_predictions = classifier.predict(X_train)
-    # val_predictions = classifier.predict(X_val)
-    test_predictions = classifier.predict(X_test)
+    if is_neuralnet:
+            classifier.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=n_epochs, batch_size=256)
+            
+            val_predictions = classifier.predict(X_val)
+            test_predictions = classifier.predict(X_test)
+            val_predictions = val_predictions.argmax(axis=-1)
+            test_predictions = test_predictions.argmax(axis=-1)
+            print(test_predictions)
+            filename = 'ann.pkl'
+            with open(filename, 'wb') as file:
+                pickle.dump(classifier, file)
+    else:
+        # alphas = [0.1, 0.5, 1.0, 2.0, 5.0]
+        # fit_priors = [True, False]
+        # class_priors = [None, [0.3, 0.6, 0.1], [0.2, 0.7, 0.1], [0.4, 0.4, 0.2]]
+
+        # # Sử dụng GridSearchCV để tìm giá trị alpha tốt nhất
+        # param_grid = {'alpha': alphas, 'fit_prior': fit_priors, 'class_prior': class_priors}
+        # grid_search = GridSearchCV(classifier, param_grid, cv=5)
+        # grid_search.fit(X_train, y_train)
+
+        # # In ra giá trị alpha tốt nhất
+        # best_alpha = grid_search.best_params_['alpha']
+        # print("Best alpha:", best_alpha)
+        # best_fit_prior = grid_search.best_params_['fit_prior']
+        # print("Best fit_prior:", best_fit_prior)
+        # best_class_prior = grid_search.best_params_['class_prior']
+        # print("Best class_prior:", best_class_prior)
+        classifier.fit(X_train, y_train)
+        train_predictions = classifier.predict(X_train)
+        val_predictions = classifier.predict(X_val)
+        test_predictions = classifier.predict(X_test)
     # return 'Kết quả với mô hình là: Nhãn '+str(test_predictions[len(test_predictions)-1])
    
     result_array = []
